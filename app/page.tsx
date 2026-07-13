@@ -48,24 +48,21 @@ export default function Page() {
 
         {/* ── Decoración fondo hero ── */}
         {[
-          { size: 320, x: '72%', y: '18%', delay: 0.2, opacity: 0.04 },
-          { size: 180, x: '85%', y: '65%', delay: 0.5, opacity: 0.03 },
-          { size: 90,  x: '8%',  y: '80%', delay: 0.8, opacity: 0.04 },
+          { size: 320, x: '72%', y: '18%', opacity: 0.04 },
+          { size: 180, x: '85%', y: '65%', opacity: 0.03 },
+          { size: 90,  x: '8%',  y: '80%', opacity: 0.04 },
         ].map((c, i) => (
-          <motion.div
+          <div
             key={i}
-            initial={{ scale: 0.4, opacity: 0 }}
-            animate={{ scale: 1, opacity: c.opacity }}
-            transition={{ delay: c.delay, duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
             className="absolute rounded-full border border-black pointer-events-none hidden lg:block"
-            style={{ width: c.size, height: c.size, left: c.x, top: c.y, transform: 'translate(-50%,-50%)' }}
+            style={{ width: c.size, height: c.size, left: c.x, top: c.y, transform: 'translate(-50%,-50%)', opacity: c.opacity }}
           />
         ))}
 
         {/* Línea diagonal decorativa */}
         <motion.div
-          initial={{ scaleY: 0, opacity: 0 }}
-          animate={{ scaleY: 1, opacity: 1 }}
+          initial={{ scaleY: 0 }}
+          animate={{ scaleY: 1 }}
           transition={{ delay: 1, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           style={{ originY: 0 }}
           className="absolute left-[50%] top-0 bottom-0 w-px bg-black/[0.04] pointer-events-none hidden lg:block"
@@ -76,9 +73,9 @@ export default function Page() {
 
           {/* Slogan — Liquid morph */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.15, duration: 0.5 }}
+            initial={{ y: -6 }}
+            animate={{ y: 0 }}
+            transition={{ delay: 0.15, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="mb-2"
           >
             <p
@@ -106,8 +103,8 @@ export default function Page() {
 
           {/* Subtítulo */}
           <motion.p
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ y: 8 }}
+            animate={{ y: 0 }}
             transition={{ delay: 0.65 }}
             className="text-black/45 text-sm leading-relaxed max-w-[300px] mb-8"
           >
@@ -116,8 +113,8 @@ export default function Page() {
 
           {/* CTAs */}
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ y: 8 }}
+            animate={{ y: 0 }}
             transition={{ delay: 0.85 }}
             className="flex flex-wrap items-center gap-3 mb-8 lg:mb-0"
           >
@@ -144,8 +141,8 @@ export default function Page() {
           {/* Featured event card — solo móvil */}
           {featured && (
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ y: 10 }}
+              animate={{ y: 0 }}
               transition={{ delay: 1.05 }}
               className="lg:hidden"
             >
@@ -169,8 +166,8 @@ export default function Page() {
           {/* Scroll hint mobile */}
           <motion.a
             href="#eventos"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ y: 6 }}
+            animate={{ y: 0 }}
             transition={{ delay: 1.4 }}
             className="absolute bottom-6 left-5 sm:left-8 lg:left-16 xl:left-24 z-10 flex items-center gap-2 lg:hidden"
             aria-label="Ver eventos"
@@ -186,36 +183,38 @@ export default function Page() {
         </div>
 
         {/* ── Columna poster — solo desktop ── */}
-        <div className="hidden lg:flex lg:flex-1 relative items-center justify-center">
-          <motion.div
-            initial={{ opacity: 0, y: 28, rotate: -2 }}
-            animate={{ opacity: 1, y: 0, rotate: -4 }}
-            transition={{ delay: 0.38, duration: 1.35, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10"
-            style={{
-              width: 'clamp(200px, 28vw, 310px)',
-              aspectRatio: '2/3',
-              borderRadius: '20px',
-              overflow: 'hidden',
-              boxShadow: '0 40px 100px rgba(0,0,0,0.18), 0 16px 48px rgba(0,0,0,0.10), 0 0 0 1px rgba(0,0,0,0.06)',
-            }}
-          >
-            <Image src={featured.flyer} fill alt={featured.name} priority className="object-cover object-top" />
-          </motion.div>
+        {featured && (
+          <div className="hidden lg:flex lg:flex-1 relative items-center justify-center">
+            <motion.div
+              initial={{ y: 28, rotate: -2 }}
+              animate={{ y: 0, rotate: -4 }}
+              transition={{ delay: 0.38, duration: 1.35, ease: [0.16, 1, 0.3, 1] }}
+              className="relative z-10"
+              style={{
+                width: 'clamp(200px, 28vw, 310px)',
+                aspectRatio: '2/3',
+                borderRadius: '20px',
+                overflow: 'hidden',
+                boxShadow: '0 40px 100px rgba(0,0,0,0.18), 0 16px 48px rgba(0,0,0,0.10), 0 0 0 1px rgba(0,0,0,0.06)',
+              }}
+            >
+              <Image src={featured.flyer} fill alt={featured.name} priority className="object-cover object-top" sizes="(max-width: 1280px) 28vw, 310px" />
+            </motion.div>
 
-          {/* Badge precio */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.7, y: 12 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ delay: 0.92, type: 'spring', stiffness: 260, damping: 18 }}
-            className="absolute z-20 right-[13%]"
-            style={{ top: '29%' }}
-          >
-            <div className="bg-[#0A0A0A] text-white font-bold text-[13px] px-4 py-2.5 rounded-full shadow-lg">
-              desde ${featured.price}
-            </div>
-          </motion.div>
-        </div>
+            {/* Badge precio */}
+            <motion.div
+              initial={{ scale: 0.7, y: 12 }}
+              animate={{ scale: 1, y: 0 }}
+              transition={{ delay: 0.92, type: 'spring', stiffness: 260, damping: 18 }}
+              className="absolute z-20 right-[13%]"
+              style={{ top: '29%' }}
+            >
+              <div className="bg-[#0A0A0A] text-white font-bold text-[13px] px-4 py-2.5 rounded-full shadow-lg">
+                desde ${featured.price}
+              </div>
+            </motion.div>
+          </div>
+        )}
       </section>
 
       {/* ════════════════════════════════════
@@ -256,49 +255,49 @@ export default function Page() {
                     className="group relative overflow-hidden rounded-2xl border border-black/[0.07] bg-white cursor-pointer"
                     style={{ boxShadow: '0 2px 20px rgba(0,0,0,0.06)' }}
                   >
-                    <div className="flex flex-col sm:flex-row">
-                      {/* Flyer */}
-                      <div className="relative shrink-0 w-full aspect-[3/2] sm:aspect-auto sm:w-[280px] lg:w-[360px] sm:self-stretch">
+                    <div className="flex flex-row items-stretch">
+                      {/* Flyer — siempre vertical, proporción portrait */}
+                      <div className="relative shrink-0 w-32 sm:w-56 lg:w-72 overflow-hidden rounded-l-2xl">
                         <Image
                           src={ev.flyer} alt={ev.name} fill
-                          className="object-cover object-top group-hover:scale-[1.03] transition-transform duration-700 rounded-t-2xl sm:rounded-t-none sm:rounded-l-2xl"
-                          sizes="(max-width: 640px) 100vw, 360px" priority={i === 0}
+                          className="object-cover object-top group-hover:scale-[1.03] transition-transform duration-700"
+                          sizes="(max-width: 640px) 128px, (max-width: 1024px) 224px, 288px"
+                          priority={i === 0}
                         />
                       </div>
 
                       {/* Info */}
-                      <div className="flex flex-col justify-between p-5 sm:p-8 flex-1">
+                      <div className="flex flex-col justify-between p-4 sm:p-7 lg:p-10 flex-1 min-w-0">
                         <div>
                           <div className="flex items-center gap-2 mb-3">
                             <span className="w-1.5 h-1.5 rounded-full bg-black animate-pulse" />
                             <span className="text-black/50 text-[10px] uppercase tracking-[0.4em]">Próximo</span>
                           </div>
                           <h3
-                            className="font-[family-name:var(--font-bebas-neue)] text-[#0A0A0A] leading-none mb-2.5"
-                            style={{ fontSize: 'clamp(30px, 5vw, 60px)', letterSpacing: '-0.015em' }}
+                            className="font-[family-name:var(--font-bebas-neue)] text-[#0A0A0A] leading-none mb-3"
+                            style={{ fontSize: 'clamp(26px, 4.5vw, 60px)', letterSpacing: '-0.015em' }}
                           >
                             {ev.name}
                           </h3>
-                          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-black/45 text-xs">
+                          <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-x-2.5 gap-y-1 text-black/45 text-xs">
                             <span className="font-semibold text-black/65">{ev.date}</span>
-                            <span className="text-black/20">·</span>
+                            <span className="hidden sm:inline text-black/20">·</span>
                             <span>{ev.time}</span>
-                            <span className="text-black/20">·</span>
-                            <MapPin className="w-3 h-3" />
-                            <span>{ev.location}, {ev.city}</span>
+                            <span className="hidden sm:inline text-black/20">·</span>
+                            <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{ev.location}, {ev.city}</span>
                           </div>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-5 pt-5 border-t border-black/[0.06] gap-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 pt-4 border-t border-black/[0.06] gap-3">
                           <div>
-                            <p className="text-black/35 text-[10px] uppercase tracking-widest mb-0.5">Precio desde</p>
+                            <p className="text-black/35 text-[10px] uppercase tracking-widest mb-0.5">Desde</p>
                             <p className="font-[family-name:var(--font-bebas-neue)] text-[#0A0A0A] text-3xl leading-none">
                               ${ev.price}
                             </p>
                           </div>
                           <motion.span
                             whileHover={{ scale: 1.03 }}
-                            className="bg-[#0A0A0A] text-white font-bold text-xs uppercase tracking-widest px-7 py-3.5 rounded-full text-center sm:text-left"
+                            className="bg-[#0A0A0A] text-white font-bold text-xs uppercase tracking-widest px-5 sm:px-7 py-3 sm:py-3.5 rounded-full text-center"
                           >
                             Ver y comprar →
                           </motion.span>
@@ -360,8 +359,8 @@ export default function Page() {
 
                   <div className="absolute top-3 left-3">
                     <motion.span
-                      initial={{ opacity: 0, y: -4 }}
-                      whileInView={{ opacity: 1, y: 0 }}
+                      initial={{ y: -4 }}
+                      whileInView={{ y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: i * 0.1 + 0.3 }}
                       className="bg-black/50 backdrop-blur-sm text-white/50 text-[9px] uppercase tracking-[0.3em] px-2.5 py-1 rounded-full"
@@ -392,7 +391,7 @@ export default function Page() {
       <section className="border-y border-black/[0.06] bg-white overflow-hidden">
         <div className="px-4 sm:px-7 lg:px-14 py-10 grid grid-cols-2 sm:grid-cols-4 divide-x divide-black/[0.05]">
           {[
-            { num: events.length, suffix: '',    label: 'Eventos realizados' },
+            { num: past.length,   suffix: '',    label: 'Eventos realizados' },
             { num: 2,             suffix: '',    label: 'Ciudades' },
             { num: 24,            suffix: 'h',   label: 'Validación máxima' },
             { num: 100,           suffix: '%',   label: 'Entradas digitales' },
@@ -556,6 +555,7 @@ export default function Page() {
             <a href="#como-funciona" className="hover:text-black/55 transition-colors">Cómo funciona</a>
             <Link href="/terminos"   className="hover:text-black/55 transition-colors">Términos</Link>
             <Link href="/privacidad" className="hover:text-black/55 transition-colors">Privacidad</Link>
+            <Link href="/soporte"    className="hover:text-black/55 transition-colors">Soporte</Link>
             <span className="text-black/12">·</span>
             <span className="text-black/15">© 2026 UP</span>
           </div>

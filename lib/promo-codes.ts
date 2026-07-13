@@ -41,6 +41,7 @@ export async function validatePromoCode(code: string, subtotal: number): Promise
 }
 
 export async function incrementPromoUsage(code: string) {
+  // El RPC hace un UPDATE atómico a nivel DB — seguro bajo concurrencia
   await supabaseAdmin.rpc('increment_promo_usage', { p_codigo: code.toUpperCase().trim() });
 }
 

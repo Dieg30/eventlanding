@@ -22,8 +22,8 @@
 html { scroll-behavior: smooth; }
 
 body {
-  background-color: var(--bg);
-  color: #fff;
+  background-color: #F8F8F6;
+  color: #0A0A0A;
   font-family: var(--font-space-grotesk), system-ui, sans-serif;
   overflow-x: hidden;
 }
@@ -41,8 +41,8 @@ body::after {
 }
 
 ::-webkit-scrollbar { width: 2px; }
-::-webkit-scrollbar-track { background: #080510; }
-::-webkit-scrollbar-thumb { background: #2a1f45; }
+::-webkit-scrollbar-track { background: #F8F8F6; }
+::-webkit-scrollbar-thumb { background: #0A0A0A33; }
 
 @keyframes marquee {
   from { transform: translateX(0); }

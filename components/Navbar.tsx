@@ -37,7 +37,7 @@ export default function Navbar() {
           <nav className="flex items-center gap-5 text-xs font-medium uppercase tracking-widest">
             <a href="#eventos"       className="text-black/35 hover:text-black transition-colors hidden md:block">Eventos</a>
             <a href="#como-funciona" className="text-black/35 hover:text-black transition-colors hidden md:block">Info</a>
-            <a href="#eventos"
+<a href="#eventos"
               className="bg-[#0A0A0A] text-white font-bold px-5 py-2 rounded-full text-[11px] hover:bg-black/80 transition-colors hidden md:block">
               Entradas
             </a>
@@ -84,8 +84,12 @@ export default function Navbar() {
                 Términos y condiciones <span className="text-black/15">↗</span>
               </Link>
               <Link href="/privacidad" onClick={close}
-                className="flex items-center justify-between text-black/40 text-xs py-3 uppercase tracking-widest">
+                className="flex items-center justify-between text-black/40 text-xs py-3 border-b border-black/[0.04] uppercase tracking-widest">
                 Política de privacidad <span className="text-black/15">↗</span>
+              </Link>
+              <Link href="/soporte" onClick={close}
+                className="flex items-center justify-between text-black/40 text-xs py-3 uppercase tracking-widest">
+                Soporte <span className="text-black/15">↗</span>
               </Link>
             </div>
           </motion.div>
