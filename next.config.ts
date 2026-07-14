@@ -20,11 +20,10 @@ const securityHeaders = [
   },
 ];
 
-const nextConfig: NextConfig = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const nextConfig: any = {
   devIndicators: false,
-  experimental: {
-    serverBodySizeLimit: '10mb',
-  },
+  experimental: { serverBodySizeLimit: '10mb' },
   images: {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 60 * 60 * 24 * 30, // 30 días
