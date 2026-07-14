@@ -191,14 +191,12 @@ export async function POST(req: NextRequest) {
   }
 
   // 5. Insertar pedido con service role
-  const { error: insertError } = await supabaseAdmin.from('pedidos').insert({
+  const orderRow: Record<string, unknown> = {
     event_slug:       slug,
     event_name:       event.name,
     ticket_type:      ticketType,
     quantity,
     total:            verifiedTotal,
-    descuento:        discount > 0 ? discount : null,
-    promo_code:       promoCode || null,
     nombre,
     apellido,
     cedula,
@@ -207,7 +205,11 @@ export async function POST(req: NextRequest) {
     comprobante_url:  signedData.signedUrl,
     comprobante_path: path,
     status:           'pendiente',
-  });
+  };
+  if (discount > 0)  orderRow.descuento  = discount;
+  if (normalizedPromo) orderRow.promo_code = normalizedPromo;
+
+  const { error: insertError } = await supabaseAdmin.from('pedidos').insert(orderRow);
 
   if (insertError) {
     console.error('Insert error:', insertError.message);
