@@ -1,7 +1,8 @@
 export interface TicketType {
   name: string;
   price: number;
-  boxOfficePrice?: number;
+  latePrice?: number;      // precio online después de earlyBirdEnds
+  boxOfficePrice?: number; // precio en boletería el día del evento
 }
 
 export interface Event {
@@ -19,6 +20,21 @@ export interface Event {
   featured: boolean;
   past: boolean;
   ticketTypes: TicketType[];
+  // ISO 8601 con offset Quito (UTC-5), ej. '2026-07-23T19:00:00-05:00'
+  earlyBirdEnds?: string;
+}
+
+/**
+ * Retorna el precio vigente según la hora actual.
+ * Se usa tanto en el servidor (submit-order) como en el cliente (display).
+ */
+export function getEffectivePrice(
+  ticket: TicketType,
+  earlyBirdEnds?: string,
+  now = new Date(),
+): number {
+  if (!ticket.latePrice || !earlyBirdEnds) return ticket.price;
+  return now >= new Date(earlyBirdEnds) ? ticket.latePrice : ticket.price;
 }
 
 export const events: Event[] = [
@@ -94,9 +110,10 @@ export const events: Event[] = [
     flyer: 'https://fihwweohpxcrbleidzkq.supabase.co/storage/v1/object/public/flyers/unipoli-rewind.webp',
     featured: true,
     past: false,
+    earlyBirdEnds: '2026-07-23T19:00:00-05:00',
     ticketTypes: [
-      { name: 'Fan',  price: 3, boxOfficePrice: 5 },
-      { name: 'Club', price: 5, boxOfficePrice: 7 },
+      { name: 'Fan',  price: 3, latePrice: 5, boxOfficePrice: 8 },
+      { name: 'Club', price: 5, latePrice: 7, boxOfficePrice: 10 },
     ],
   },
 ];

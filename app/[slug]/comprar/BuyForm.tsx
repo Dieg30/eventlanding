@@ -1,13 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLeft, Upload, CheckCircle, Loader2, X, Copy, AlertCircle, Check, Tag, ChevronDown } from 'lucide-react';
 import type { Event } from '@/lib/events';
+import { getEffectivePrice } from '@/lib/events';
 import type { BankInfo } from '@/lib/bank-info';
 import Navbar from '@/components/Navbar';
+import EarlyBirdCountdown from '@/components/EarlyBirdCountdown';
 
 type FormState = 'idle' | 'loading' | 'success' | 'error';
 
@@ -83,8 +85,17 @@ export default function BuyForm({ event, bankInfo }: Props) {
   const [promoLabel, setPromoLabel]   = useState('');
   const [discount, setDiscount]       = useState(0);
 
+  const [now, setNow] = useState<Date | null>(null);
+  useEffect(() => {
+    setNow(new Date());
+    const id = setInterval(() => setNow(new Date()), 30_000);
+    return () => clearInterval(id);
+  }, []);
+
   const selectedType = event.ticketTypes.find((t) => t.name === form.ticketType);
-  const unitPrice = selectedType?.price ?? 0;
+  const unitPrice = selectedType
+    ? (now ? getEffectivePrice(selectedType, event.earlyBirdEnds, now) : selectedType.price)
+    : 0;
   const subtotal  = unitPrice * Number(form.quantity);
   const total     = Math.max(0, subtotal - discount);
 
@@ -306,9 +317,12 @@ export default function BuyForm({ event, bankInfo }: Props) {
                   onChange={(e) => { setForm((p) => ({ ...p, ticketType: e.target.value })); removePromo(); }}
                   className="w-full border border-black/[0.08] bg-white rounded-xl px-4 py-3 text-sm text-[#0A0A0A] focus:outline-none focus:border-black/25 transition-colors appearance-none"
                 >
-                  {event.ticketTypes.map((t) => (
-                    <option key={t.name} value={t.name}>{t.name} — ${t.price}</option>
-                  ))}
+                  {event.ticketTypes.map((t) => {
+                    const p = now ? getEffectivePrice(t, event.earlyBirdEnds, now) : t.price;
+                    return (
+                      <option key={t.name} value={t.name}>{t.name} — ${p}</option>
+                    );
+                  })}
                 </select>
               </div>
               <div>
@@ -344,6 +358,9 @@ export default function BuyForm({ event, bankInfo }: Props) {
                 <span className="font-[family-name:var(--font-bebas-neue)] text-[#0A0A0A] text-3xl leading-none">${total}</span>
               </div>
             </div>
+            {event.earlyBirdEnds && (
+              <EarlyBirdCountdown deadline={event.earlyBirdEnds} className="mt-2" />
+            )}
 
             {/* Código de descuento */}
             <div className="mt-2">

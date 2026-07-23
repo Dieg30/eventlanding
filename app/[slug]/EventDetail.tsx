@@ -1,18 +1,28 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLeft, MapPin, Clock, Calendar, ExternalLink } from 'lucide-react';
 import type { Event } from '@/lib/events';
+import { getEffectivePrice } from '@/lib/events';
 import Navbar from '@/components/Navbar';
+import EarlyBirdCountdown from '@/components/EarlyBirdCountdown';
 
 interface Props {
   event: Event;
 }
 
 export default function EventDetail({ event }: Props) {
+  // null = SSR / pre-mount (evita mismatch de hidratación)
+  const [now, setNow] = useState<Date | null>(null);
+  useEffect(() => {
+    setNow(new Date());
+    const id = setInterval(() => setNow(new Date()), 30_000);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <main className="bg-[#F8F8F6] text-[#0A0A0A] min-h-screen">
       <Navbar />
@@ -182,8 +192,11 @@ export default function EventDetail({ event }: Props) {
                     >
                       <div className="flex items-start justify-between mb-2">
                         <p className="text-[#0A0A0A] font-semibold text-sm">{tt.name}</p>
-                        <span className="font-[family-name:var(--font-bebas-neue)] text-3xl text-[#0A0A0A] leading-none">
-                          ${tt.price}
+                        <span
+                          suppressHydrationWarning
+                          className="font-[family-name:var(--font-bebas-neue)] text-3xl text-[#0A0A0A] leading-none"
+                        >
+                          ${now ? getEffectivePrice(tt, event.earlyBirdEnds, now) : tt.price}
                         </span>
                       </div>
                       <p className="text-black/25 text-[10px]">Preventa · por persona</p>
@@ -195,6 +208,9 @@ export default function EventDetail({ event }: Props) {
                     </div>
                   ))}
                 </div>
+                {event.earlyBirdEnds && (
+                  <EarlyBirdCountdown deadline={event.earlyBirdEnds} className="mt-4" />
+                )}
               </motion.div>
             )}
 

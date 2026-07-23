@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { calcDiscount } from '@/lib/promo-codes';
-import { getEventBySlug } from '@/lib/events';
+import { getEventBySlug, getEffectivePrice } from '@/lib/events';
 
 // Cliente con service role — corre SOLO en el servidor, nunca llega al browser
 const supabaseAdmin = createClient(
@@ -107,7 +107,7 @@ export async function POST(req: NextRequest) {
   if (event.past) return NextResponse.json({ error: 'Este evento ya finalizó.' }, { status: 400 });
   const serverTicketType = event.ticketTypes.find(t => t.name === ticketType);
   if (!serverTicketType) return NextResponse.json({ error: 'Tipo de entrada inválido.' }, { status: 400 });
-  const subtotal = serverTicketType.price * quantity;
+  const subtotal = getEffectivePrice(serverTicketType, event.earlyBirdEnds) * quantity;
 
   if (subtotal <= 0) {
     return NextResponse.json({ error: 'Total inválido.' }, { status: 400 });
