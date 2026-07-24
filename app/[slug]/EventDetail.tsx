@@ -199,7 +199,7 @@ export default function EventDetail({ event }: Props) {
                           ${now ? getEffectivePrice(tt, event.earlyBirdEnds, now) : tt.price}
                         </span>
                       </div>
-                      <p className="text-black/25 text-[10px]">Preventa · por persona</p>
+                      <p className="text-black/25 text-[10px]">Entrada · por persona</p>
                     </div>
                   ))}
                 </div>

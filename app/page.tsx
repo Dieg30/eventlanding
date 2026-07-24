@@ -303,8 +303,8 @@ export default function Page() {
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 pt-4 border-t border-black/[0.06] gap-3">
                           <div>
                             <p className="text-black/35 text-[10px] uppercase tracking-widest mb-0.5">Desde</p>
-                            <p className="font-[family-name:var(--font-bebas-neue)] text-[#0A0A0A] text-3xl leading-none">
-                              ${ev.price}
+                            <p suppressHydrationWarning className="font-[family-name:var(--font-bebas-neue)] text-[#0A0A0A] text-3xl leading-none">
+                              ${now ? Math.min(...ev.ticketTypes.map(t => getEffectivePrice(t, ev.earlyBirdEnds, now))) : ev.price}
                             </p>
                           </div>
                           <motion.span
