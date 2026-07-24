@@ -9,6 +9,7 @@ import type { Event } from '@/lib/events';
 import { getEffectivePrice } from '@/lib/events';
 import Navbar from '@/components/Navbar';
 import EarlyBirdCountdown from '@/components/EarlyBirdCountdown';
+import { RetroTvError } from '@/components/ui/retro-tv-error';
 
 interface Props {
   event: Event;
@@ -209,6 +210,15 @@ export default function EventDetail({ event }: Props) {
               </motion.div>
             )}
 
+            {/* Cronómetro cierre venta online */}
+            {event.onlineEnds && (
+              <EarlyBirdCountdown
+                deadline={event.onlineEnds}
+                label="Venta online cierra en"
+                className="mb-4"
+              />
+            )}
+
             {/* CTA */}
             <motion.div
               initial={{ y: 8 }}
@@ -218,6 +228,18 @@ export default function EventDetail({ event }: Props) {
               {event.past ? (
                 <div className="border border-black/[0.07] rounded-full py-4 text-center text-black/20 text-xs uppercase tracking-widest">
                   Este evento ya finalizó
+                </div>
+              ) : now && event.onlineEnds && now >= new Date(event.onlineEnds) ? (
+                <div className="border border-black/[0.07] rounded-2xl p-6 bg-white flex flex-col items-center gap-3">
+                  <RetroTvError title="UPS" message="SOLO BOLETERÍA" />
+                  <div className="flex gap-4 pt-1">
+                    {event.ticketTypes.map((tt) => tt.boxOfficePrice ? (
+                      <p key={tt.name} className="text-black/50 text-xs text-center">
+                        {tt.name}<br />
+                        <span className="font-[family-name:var(--font-bebas-neue)] text-xl text-[#0A0A0A]">${tt.boxOfficePrice}</span>
+                      </p>
+                    ) : null)}
+                  </div>
                 </div>
               ) : (
                 <Link href={`/${event.slug}/comprar`}>

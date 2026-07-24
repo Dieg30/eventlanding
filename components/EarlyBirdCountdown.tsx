@@ -5,9 +5,10 @@ import { useState, useEffect } from 'react';
 interface Props {
   deadline: string; // ISO 8601 con offset, ej. '2026-07-23T19:00:00-05:00'
   className?: string;
+  label?: string; // texto antes del tiempo; default: 'Últimas preventas · precio sube en'
 }
 
-export default function EarlyBirdCountdown({ deadline, className = '' }: Props) {
+export default function EarlyBirdCountdown({ deadline, className = '', label = 'Últimas preventas · precio sube en' }: Props) {
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
 
   useEffect(() => {
@@ -35,7 +36,7 @@ export default function EarlyBirdCountdown({ deadline, className = '' }: Props) 
     <div className={`flex items-center gap-2 ${className}`}>
       <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
       <span className="text-amber-600/90 text-[10px] uppercase tracking-[0.4em]">
-        Últimas preventas · precio sube en {formatted}
+        {label} {formatted}
       </span>
     </div>
   );

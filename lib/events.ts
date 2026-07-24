@@ -22,6 +22,8 @@ export interface Event {
   ticketTypes: TicketType[];
   // ISO 8601 con offset Quito (UTC-5), ej. '2026-07-23T19:00:00-05:00'
   earlyBirdEnds?: string;
+  // Hasta cuándo se venden entradas online (después solo boletería)
+  onlineEnds?: string;
 }
 
 /**
@@ -111,9 +113,10 @@ export const events: Event[] = [
     featured: true,
     past: false,
     earlyBirdEnds: '2026-07-23T19:00:00-05:00',
+    onlineEnds: '2026-07-24T16:00:00-05:00',
     ticketTypes: [
-      { name: 'Fan',  price: 3, latePrice: 5, boxOfficePrice: 8 },
-      { name: 'Club', price: 5, latePrice: 7, boxOfficePrice: 10 },
+      { name: 'Fan',  price: 3, latePrice: 5, boxOfficePrice: 5 },
+      { name: 'Club', price: 5, latePrice: 7, boxOfficePrice: 7 },
     ],
   },
 ];
