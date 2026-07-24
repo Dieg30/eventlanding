@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { MapPin, ArrowDown } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import { MorphingText } from '@/components/ui/liquid-text';
-import { events } from '@/lib/events';
+import { events, getEffectivePrice } from '@/lib/events';
 
 const upcoming = events.filter(e => !e.past);
 const past     = events.filter(e =>  e.past);
@@ -36,6 +36,18 @@ function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string
 }
 
 export default function Page() {
+  const [now, setNow] = useState<Date | null>(null);
+  useEffect(() => {
+    setNow(new Date());
+    const id = setInterval(() => setNow(new Date()), 30_000);
+    return () => clearInterval(id);
+  }, []);
+
+  const featuredFromPrice = featured
+    ? (now
+        ? Math.min(...featured.ticketTypes.map(t => getEffectivePrice(t, featured.earlyBirdEnds, now)))
+        : featured.price)
+    : 0;
 
   return (
     <main className="bg-[#F8F8F6] text-[#0A0A0A] overflow-x-hidden">
@@ -155,7 +167,7 @@ export default function Page() {
                   <div className="flex-1 min-w-0">
                     <p className="text-black/35 text-[9px] uppercase tracking-[0.35em] mb-0.5">Próximo evento</p>
                     <p className="font-semibold text-sm text-[#0A0A0A] truncate leading-tight">{featured.name}</p>
-                    <p className="text-black/40 text-xs mt-0.5">{featured.date} · desde ${featured.price}</p>
+                    <p className="text-black/40 text-xs mt-0.5">{featured.date} · desde ${featuredFromPrice}</p>
                   </div>
                   <ArrowDown className="w-3.5 h-3.5 text-black/20 shrink-0 -rotate-90" />
                 </div>
@@ -210,7 +222,7 @@ export default function Page() {
               style={{ top: '29%' }}
             >
               <div className="bg-[#0A0A0A] text-white font-bold text-[13px] px-4 py-2.5 rounded-full shadow-lg">
-                desde ${featured.price}
+                desde ${featuredFromPrice}
               </div>
             </motion.div>
           </div>

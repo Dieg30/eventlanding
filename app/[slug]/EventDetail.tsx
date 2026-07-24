@@ -200,11 +200,6 @@ export default function EventDetail({ event }: Props) {
                         </span>
                       </div>
                       <p className="text-black/25 text-[10px]">Preventa · por persona</p>
-                      {tt.boxOfficePrice && (
-                        <p className="text-black/35 text-[10px] mt-1">
-                          Día del evento: <span className="font-semibold">${tt.boxOfficePrice}</span> · solo boletería
-                        </p>
-                      )}
                     </div>
                   ))}
                 </div>
